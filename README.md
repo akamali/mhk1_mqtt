@@ -2,9 +2,7 @@
 
 Control Mitsubishi Heat Pump using MHK1 and MQTT
 
-DISCLAIMER: There is a chance that using the code here causes serious damage to your equipment, use this project at your own risk.
-
-
+DISCLAIMER: There is a chance that using the code here causes serious damage to your equipment, use this project at your own risk. For the most part this project is a giant hack and there hasn't been a ton of proper engineering/programming effort into it. 
 
 ## ESP32 MQTT MHK1
 ### Why would you want to use this project?
