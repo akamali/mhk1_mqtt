@@ -122,11 +122,11 @@ sensor:
 ### How to use?
 The idea is that MHK1 normally drives the heat pump, but you can override it by using MQTT (over Home Assistant in this case). Out of the box you should be able to use your MHK1 like normal, and any modifications done through MHK1 should show up under your climate card:
 
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/CN105-Female.jpg"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ClimateCard.PNG"/>
 
 When you make any changes through MQTT, then the controller goes into the override mode. While in override mode settings from MHK1 are ignored. You can tell the controller is in override mode by checking the RGB light on the ESP32, if it's green it means it's in override mode. You can also tell if override is enabled by listening to the `heatpump/override` topic, if you use the Home Assistant integration from above that flag is connected to "Aux heat" under the climate card:
 
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/CN105-Female.jpg"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ClimateCard-AuxHeat.PNG"/>
 
 You can turn off the override mode by:
 - Switching aux heat off from Home Assistant.
@@ -178,5 +178,8 @@ Now when injecting:
 - Instead of returning the response from HP we return a previously cached value to MHK1 to keep it happy
 
 What this means is for packet injection to work there has to be a functional MHK1 connected. If we don't get any packets from MHK1 then the injection mechanism doesn't work.
+
+#### Debugging
+You can enable debug logs by publishing `on` to the `heatpump/debug/set` topic. Debug and info logs are published to `heatpump/debug` and `heatpump/info` topics.
 
 ## Heat Pump Emulator
