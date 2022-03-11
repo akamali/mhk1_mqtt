@@ -22,11 +22,11 @@ I believe there is a way to change enough things in SwiCago/HeatPump so that the
 ### OK, I'm interested, where do I start?
 In order to use this project you need a microcontroller that has two UARTs, such as ESP32. Currently I'm using a ESP32-C3-32S ([aliexpress](https://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20220310171133&SearchText=ESP32-C3-32S)), but any ESP32 should work.
 
-First step is to make a connection from your ESP32 to your heat pump. To get that working please refer to the instructions from SwiCago/HeatPump. Once you get the examples working from that project you can continue here. See [HeatPumpEmulator](https://github.com/akamali/mhk1_mqtt/tree/akamali-first-commit#heat-pump-emulator) below, it can be used to test you have the right set up without necessarily connecting your microcontroller to your heat pump.
+First step is to make a connection from your ESP32 to your heat pump. To get that working please refer to the instructions from SwiCago/HeatPump. Once you get the examples working from that project you can continue here. See [HeatPumpEmulator](https://github.com/akamali/mhk1_mqtt#heat-pump-emulator) below, it can be used to test you have the right set up without necessarily connecting your microcontroller to your heat pump.
 
 Note that in addition to the parts listed there you also need a female version of PAP-05V-S. I couldn't find one locally, so I got a generic female 5P 2.0mm connector and I broke enough pieces from it to get it to fit.
 
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/CN105-Female.jpg"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/master/CN105-Female.jpg"/>
 
 You need to set up your pins in the code below:
 ```
@@ -48,18 +48,18 @@ The on board lights of the ESP32-C3-32S are helpful for debugging issues
 - Green light means MHK1 is not in control and settings are being overridden from MQTT.
 
 Blue (HP not responding)
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Blue.jpg"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/master/ESP32-Blue.jpg"/>
 
 Green (Override flag is set)
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Green.jpg"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/master/ESP32-Green.jpg"/>
 
 Red (Not receiving anything from MHK1)
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Red.jpg"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/master/ESP32-Red.jpg"/>
 
 Normal/WiFi Connected
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Normal.jpg"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/master/ESP32-Normal.jpg"/>
 
-I recommend using [HeatPumpEmulator](https://github.com/akamali/mhk1_mqtt/tree/akamali-first-commit#heat-pump-emulator) to test things properly and work through all the issues, then hopefully connecting to the heat pump will be effortless.
+I recommend using [HeatPumpEmulator](https://github.com/akamali/mhk1_mqtt#heat-pump-emulator) to test things properly and work through all the issues, then hopefully connecting to the heat pump will be effortless.
 
 ### Integration with Home Assistant
 I'm no Home Assistant expert and I'm sure there are better ways of achieving what I've done here, you can use my settings to start. Set up your MQTT broker and verify things work, tons of tutorials online on this.
@@ -132,11 +132,11 @@ sensor:
 ### How to use?
 The idea is that MHK1 normally drives the heat pump, but you can override it by using MQTT (over Home Assistant in this case). Out of the box you should be able to use your MHK1 like normal, and any modifications done through MHK1 should show up under your climate card:
 
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ClimateCard.PNG"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/master/ClimateCard.PNG"/>
 
 When you make any changes through MQTT, then the controller goes into the override mode. While in override mode settings from MHK1 are ignored. You can tell the controller is in override mode by checking the RGB light on the ESP32, if it's green it means it's in override mode. You can also tell if override is enabled by listening to the `heatpump/override` topic, if you use the Home Assistant integration from above that flag is connected to "Aux heat" under the climate card:
 
-<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ClimateCard-AuxHeat.PNG"/>
+<img src="https://github.com/akamali/mhk1_mqtt/blob/master/ClimateCard-AuxHeat.PNG"/>
 
 You can turn off the override mode by:
 - Switching aux heat off from Home Assistant.
