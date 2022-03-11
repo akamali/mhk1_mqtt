@@ -49,6 +49,18 @@ The on board lights of the ESP32-C3-32S are helpful for debugging issues
 - Blue light means no data is being received from HP.
 - Green light means MHK1 is not in control and settings are being overridden from MQTT.
 
+Blue (HP not responding)
+<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Blue.jpg"/>
+
+Green (Override flag is set)
+<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Green.jpg"/>
+
+Red (Not receiving anything from MHK1)
+<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Red.jpg"/>
+
+Normal/WiFi Connected
+<img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Normal.jpg"/>
+
 I recommend using HeatPumpEmulator to test things properly and work through all the issues, then hopefully connecting to the heat pump will be effortless.
 
 ### Integration with Home Assistant
