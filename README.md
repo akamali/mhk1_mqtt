@@ -1,4 +1,4 @@
-# mhk1_mqtt
+# MHK1 + MQTT (Home Assistant, etc)
 
 Control Mitsubishi Heat Pump using MHK1 and MQTT
 
