@@ -195,3 +195,4 @@ What this means is for packet injection to work there has to be a functional MHK
 You can enable debug logs by publishing `on` to the `heatpump/debug/set` topic. Debug and info logs are published to `heatpump/debug` and `heatpump/info` topics.
 
 ## Heat Pump Emulator
+See https://github.com/akamali/mitsubishi_heatpump_emulator. It's a library that emulates a heat pump, it can be used for debugging ESP32 issues without interacting directly with a real heat pump.
