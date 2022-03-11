@@ -24,7 +24,7 @@ I believe there is a way to change enough things in SwiCago/HeatPump so that the
 ### OK, I'm interested, where do I start?
 In order to use this project you need a microcontroller that has two UARTs, such as ESP32. Currently I'm using a ESP32-C3-32S ([aliexpress](https://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20220310171133&SearchText=ESP32-C3-32S)), but any ESP32 should work.
 
-First step is to make a connection from your ESP32 to your heat pump. To get that working please refer to the instructions from SwiCago/HeatPump. Once you get the examples working from that project you can continue here. See HeatPumpEmulator below, it can be used to test you have the right set up without necessarily connecting your microcontroller to your heat pump.
+First step is to make a connection from your ESP32 to your heat pump. To get that working please refer to the instructions from SwiCago/HeatPump. Once you get the examples working from that project you can continue here. See [HeatPumpEmulator](https://github.com/akamali/mhk1_mqtt/tree/akamali-first-commit#heat-pump-emulator) below, it can be used to test you have the right set up without necessarily connecting your microcontroller to your heat pump.
 
 Note that in addition to the parts listed there you also need a female version of PAP-05V-S. I couldn't find one locally, so I got a generic female 5P 2.0mm connector and I broke enough pieces from it to get it to fit.
 
@@ -61,7 +61,7 @@ Red (Not receiving anything from MHK1)
 Normal/WiFi Connected
 <img src="https://github.com/akamali/mhk1_mqtt/blob/akamali-first-commit/ESP32-Normal.jpg"/>
 
-I recommend using HeatPumpEmulator to test things properly and work through all the issues, then hopefully connecting to the heat pump will be effortless.
+I recommend using [HeatPumpEmulator](https://github.com/akamali/mhk1_mqtt/tree/akamali-first-commit#heat-pump-emulator) to test things properly and work through all the issues, then hopefully connecting to the heat pump will be effortless.
 
 ### Integration with Home Assistant
 I'm no Home Assistant expert and I'm sure there are better ways of achieving what I've done here, you can use my settings to start. Set up your MQTT broker and verify things work, tons of tutorials online on this.
