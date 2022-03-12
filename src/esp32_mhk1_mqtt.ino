@@ -41,7 +41,7 @@ const int MHK1_RESET_OVERRIDE_PERIOD = 1 * 60000;
 const int WIFI_RECONNECT_DELAY = 5*60000; // time to wait before retrying to connect to WiFi. Increase so that MHK1 doesn't lose connectivity often if you have unstable wifi
 
 Preferences preferences;
-bool _debugMode = true;
+bool _debugMode = false;
 bool _debugToSerial = false;
 bool wifiConnected = false;
 bool hpConnected = false;
