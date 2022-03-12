@@ -151,6 +151,24 @@ When in override mode changes to the following are ignored:
 
 Note that MHK1 will continue to send room temperature readings to the heat pump even when in override mode. This room temperature value is what is used by the heat pump to adjust it's operation mode. 
 
+### Setting remote room temperature
+By default the heat pump uses room temperature readings from MHK1. You can override this by publishing a different temperature value to the `heatpump/remote_temp/set` topic. The temperature value has to be a valid positive float value in Celcius, for example: 23.5
+
+This value has to be refreshed periodically, even if the temperature value doesn't change. If the controller doesn't receive an update in 5 minutes it will fallback to the readings from MHK1.
+
+To disable the override and switch back to readings from MHK1 either don't publish anything for 5 minutes, or publish `0.0`.
+
+Note that when the room temperature is being overriden the display on the MHK1 will continue to show its own reading. However, the heat pump will use the temperature you've set to adjust heating/cooling settings. You can verify room temperature is set correclty by monitoring the status topic `heatpump/status`: 
+```
+{
+  "roomTemperature": 22.5,
+  "operating": false,
+  "compressorFrequency": 0,
+  "compressorState": 0,
+  "fanMode": 1
+}
+```
+
 ### (Installer) Functions
 This library supports changing function settings through MQTT commands. Be extra careful when using this functionality. Not all functions and values are properly documented, and having incorrect set up can damage your equipment.
 

@@ -301,6 +301,34 @@ void HeatPump::createPacket(byte *packet, heatpumpSettings settings) {
   packet[21] = chkSum;
 }
 
+void HeatPump::setRemoteTemperature(float setting, byte* packet, int& length) {
+  for (int i = 0; i < 21; i++) {
+    packet[i] = 0x00;
+  } 
+  for (int i = 0; i < HEADER_LEN; i++) {
+    packet[i] = HEADER[i];
+  }
+  packet[5] = 0x07;
+  if(setting > 0) {
+    packet[6] = 0x01;
+    setting = setting * 2;
+    setting = round(setting);
+    setting = setting / 2;
+    float temp1 = 3 + ((setting - 10) * 2);
+    packet[7] = (int)temp1;
+    float temp2 = (setting * 2) + 128;
+    packet[8] = (int)temp2;
+  }
+  else {
+    packet[6] = 0x00;
+    packet[8] = 0x80; //MHK1 send 80, even though it could be 00, since ControlByte is 00
+  } 
+  // add the checksum
+  byte chkSum = checkSum(packet, 21);
+  packet[21] = chkSum;
+  length = 22;  
+}
+
 int HeatPump::readPacket(byte const* packet, int const length) {
   byte const* header = &packet[0];
   bool foundStart = false;
