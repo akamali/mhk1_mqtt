@@ -41,12 +41,15 @@ const int MHK1_RESET_OVERRIDE_PERIOD = 1 * 60000;
 const int WIFI_RECONNECT_DELAY = 5*60000; // time to wait before retrying to connect to WiFi. Increase so that MHK1 doesn't lose connectivity often if you have unstable wifi
 
 Preferences preferences;
-bool _debugMode = false;
+bool _debugMode = true;
 bool _debugToSerial = false;
 bool wifiConnected = false;
 bool hpConnected = false;
+double remoteTemperature = 0.0;
+bool remoteTemperatureSet = false;
 long timeSinceLastWifiConnect = 0;
 long timeSinceLastMqttConnect = 0;
+long timeSinceRemoteTempSet = 0;
 
 /**
  * When this flag is set we ignore changes to the settings from MHK1.
@@ -443,6 +446,30 @@ void handleMqttOverrideTopic(const char* message) {
   }
 }
 
+void handleMqttRemoteTempTopic(const char* message) {
+  double temperature = String(message).toDouble();
+  bool disable = false;
+  if (isnan(temperature)) {
+    disable = true;
+    infoLog("Remote temperature is not a number");
+  } else if (temperature < 0.0001) {
+    disable = true;
+    infoLog("Remote temperature is <= 0");
+  }
+
+  timeSinceRemoteTempSet = millis();
+  remoteTemperatureSet = !disable;
+  remoteTemperature = temperature;
+}
+
+void handleRemoteTempTimeout() {
+  if (remoteTemperatureSet && millis() - timeSinceRemoteTempSet > 5 * 60000) {
+    remoteTemperatureSet = false;
+    infoLog("Disabling remote temp since no temperature has been set lately.");
+    remoteTemperature = 0;
+  }
+}
+
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
   // Copy payload into message buffer
   char message[length + 1];
@@ -459,6 +486,8 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
     handleMqttFunctionsTopic(message);
   } else if (strcmp(topic, heatpump_override_set_topic) == 0) {
     handleMqttOverrideTopic(message);
+  } else if (strcmp(topic, heatpump_remote_temp_topic) == 0) {
+    handleMqttRemoteTempTopic(message);
   } else {//should never get called, as that would mean something went wrong with subscribe
     mqtt_client.publish(heatpump_debug_topic, "heatpump: wrong topic received");
   }
@@ -471,6 +500,7 @@ void mqttConnect() {
       mqtt_client.subscribe(heatpump_set_topic);
       mqtt_client.subscribe(heatpump_functions_command_topic);
       mqtt_client.subscribe(heatpump_override_set_topic);
+      mqtt_client.subscribe(heatpump_remote_temp_topic);
       mqtt_client.subscribe(heatpump_debug_set_topic);
       mqtt_client.setSocketTimeout(1); // 1 second timeout
       infoLog("mqtt Connected");
@@ -525,6 +555,7 @@ void loop() {
   connectWifi();
   mqttConnect();
   setLamps();
+  handleRemoteTempTimeout();
 
   publishOverrideStatus(false);
   publishHPSettings();
@@ -897,9 +928,18 @@ void handleMhl1Set(byte const* mhk1ReadBuffer, int packetLen) {
   if (mhk1ReadBuffer[5] == 0x7) {
     // on set remote temp let's only invalidate the relevant cache line
     memset(cachedResponses[IDX_RSP_ROOM_TEMP], 0, PACKET_LEN);
-    writeToSerial(HPSerial, mhk1ReadBuffer, packetLen);
 
-    debugLog("Setting remote temp");
+    if (!remoteTemperatureSet) {
+      writeToSerial(HPSerial, mhk1ReadBuffer, packetLen);
+      debugLog("Setting remote temp from MHK1");
+    } else {
+      byte setTempPacket[PACKET_LEN];
+      int setPacketLen = 0;
+      hp.setRemoteTemperature(remoteTemperature, setTempPacket, setPacketLen);
+      writeToSerial(HPSerial, setTempPacket, setPacketLen);
+      debugLog(String("Overriding remote temp with ") + remoteTemperature);
+    }
+
   } else if (mhk1ReadBuffer[5] == 0x1 && overrideGenericSettings) {
     if (lastMhk1SetSettingPacket == -1 || millis() - lastMhk1SetSettingPacket > MHK1_RESET_OVERRIDE_PERIOD) {
       // we'll just ignore the call and tell MHK1 that set was successful, on the next get call MHK1 will figure out that it's command was overridden externally

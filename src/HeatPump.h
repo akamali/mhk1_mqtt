@@ -216,7 +216,7 @@ class HeatPump
     void setModeSetting(const char* setting);
     float getTemperature();
     void setTemperature(float setting);
-    void setRemoteTemperature(float setting);
+    void setRemoteTemperature(float setting, byte* packet, int& length);
     const char* getFanSpeed();
     void setFanSpeed(const char* setting);
     const char* getVaneSetting();
