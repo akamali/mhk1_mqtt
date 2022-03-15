@@ -23,6 +23,7 @@ const char* heatpump_timers_topic       = "heatpump/timers";
 const char* heatpump_override_topic     = "heatpump/override";
 const char* heatpump_override_set_topic = "heatpump/override/set";
 const char* heatpump_remote_temp_topic  = "heatpump/remote_temp/set";
+const char* heatpump_reboot_topic       = "heatpump/reboot";
 
 const char* heatpump_debug_topic        = "heatpump/debug";
 const char* heatpump_debug_set_topic    = "heatpump/debug/set";

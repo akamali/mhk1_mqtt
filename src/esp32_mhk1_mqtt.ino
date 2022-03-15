@@ -462,6 +462,12 @@ void handleMqttRemoteTempTopic(const char* message) {
   remoteTemperature = temperature;
 }
 
+void handleMqttRebootTopic(const char* message) {
+  if (strcmp(message, "1") == 0 || strcmp(message, "true") == 0) {
+    rebootMe("Reboot because MQTT topic");
+  }
+}
+
 void handleRemoteTempTimeout() {
   if (remoteTemperatureSet && millis() - timeSinceRemoteTempSet > 5 * 60000) {
     remoteTemperatureSet = false;
@@ -488,6 +494,8 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
     handleMqttOverrideTopic(message);
   } else if (strcmp(topic, heatpump_remote_temp_topic) == 0) {
     handleMqttRemoteTempTopic(message);
+  } else if (strcmp(topic, heatpump_reboot_topic) == 0) {
+    handleMqttRebootTopic(message);
   } else {//should never get called, as that would mean something went wrong with subscribe
     mqtt_client.publish(heatpump_debug_topic, "heatpump: wrong topic received");
   }
@@ -501,6 +509,7 @@ void mqttConnect() {
       mqtt_client.subscribe(heatpump_functions_command_topic);
       mqtt_client.subscribe(heatpump_override_set_topic);
       mqtt_client.subscribe(heatpump_remote_temp_topic);
+      mqtt_client.subscribe(heatpump_reboot_topic);
       mqtt_client.subscribe(heatpump_debug_set_topic);
       mqtt_client.setSocketTimeout(1); // 1 second timeout
       infoLog("mqtt Connected");
